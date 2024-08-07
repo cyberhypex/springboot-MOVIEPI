@@ -44,6 +44,6 @@ public class MovieDTO { //DTO class do not need  DB level Validation
     private Integer releaseYear;
 
 
-    @NotBlank(message = "Please Provide poster url")
-    private String posterUrl;
+    @NotBlank(message = "Please Provide poster url") //validation
+    private String posterUrl; //to serve it on the frontend
 }
