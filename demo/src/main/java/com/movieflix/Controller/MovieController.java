@@ -7,11 +7,9 @@ import com.movieflix.DTO.MovieDTO;
 import com.movieflix.Service.MovieService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.*;
 
 import java.io.IOException;
 
@@ -40,5 +38,17 @@ public class MovieController {
         //with file and jSOn u can't directly send any files, convert in string
 
 
+    }
+
+
+    @GetMapping("/{movieId}")
+    public ResponseEntity<MovieDTO> getMovieHandler(@PathVariable Integer movieId){
+        return ResponseEntity.ok(movieService.getMovie(movieId));
+    }
+
+    @GetMapping("/all")
+
+    public  ResponseEntity<List<MovieDTO>> getAllMovieHandler(){
+        return ResponseEntity.ok(movieService.getAllMovies());
     }
 }
