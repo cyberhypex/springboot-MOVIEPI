@@ -26,7 +26,7 @@ public class FileServiceImple implements FileService {
         }
         //copy the file or upload file to the path, // filePath is where we will be actually uploading file
 
-        Files.copy(file.getInputStream(),Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(file.getInputStream(),Paths.get(filePath));
 
 
         return fileName; //uploaded to server

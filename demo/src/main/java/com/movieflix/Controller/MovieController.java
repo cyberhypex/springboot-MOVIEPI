@@ -30,15 +30,7 @@ public class MovieController {
 
     }
 
-    private MovieDTO convertToMovieDto(String movieDtoObj) throws JsonProcessingException { //private Method to convert a stringMovieDto to MovieDto
 
-        ObjectMapper objectMapper=new ObjectMapper(); //Object mapping help from package
-      return  objectMapper.readValue(movieDtoObj,MovieDTO.class); //readvalue from string movieDtoObj and map to MovieDTOobje
-        //because response will be in JSON , and while dealing
-        //with file and jSOn u can't directly send any files, convert in string
-
-
-    }
 
 
     @GetMapping("/{movieId}")
@@ -50,5 +42,29 @@ public class MovieController {
 
     public  ResponseEntity<List<MovieDTO>> getAllMovieHandler(){
         return ResponseEntity.ok(movieService.getAllMovies());
+    }
+
+    @PutMapping("/update/{movieId}")
+    public ResponseEntity<MovieDTO> updateMovieHandler(@PathVariable Integer movieId,
+                                                       @RequestPart MultipartFile file,
+                                                       @RequestPart String movieDtoObj) throws IOException {
+        if (file.isEmpty()) file = null;
+        MovieDTO movieDto = convertToMovieDto(movieDtoObj);
+        return ResponseEntity.ok(movieService.updateMovie(movieId, movieDto, file));
+    }
+
+    @DeleteMapping("/delete/{movieID}")
+    public ResponseEntity<String> deleteMovieHandler(@PathVariable Integer movieID) throws IOException {
+        return ResponseEntity.ok(movieService.deleteMovie(movieID));
+    }
+
+    private MovieDTO convertToMovieDto(String movieDtoObj) throws JsonProcessingException { //private Method to convert a stringMovieDto to MovieDto
+
+        ObjectMapper objectMapper=new ObjectMapper(); //Object mapping help from package
+        return  objectMapper.readValue(movieDtoObj,MovieDTO.class); //readvalue from string movieDtoObj and map to MovieDTOobje
+        //because response will be in JSON , and while dealing
+        //with file and jSOn u can't directly send any files, convert in string
+
+
     }
 }
