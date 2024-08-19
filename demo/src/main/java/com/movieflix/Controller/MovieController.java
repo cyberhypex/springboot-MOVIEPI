@@ -4,8 +4,10 @@ package com.movieflix.Controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieflix.DTO.MovieDTO;
+import com.movieflix.DTO.MoviePageResponse;
 import com.movieflix.Service.MovieService;
 import com.movieflix.exceptions.EmptyFileException;
+import com.movieflix.utils.AppConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
 
 import java.io.IOException;
+
+import static com.movieflix.utils.AppConstants.PAGE_NUMBER;
+import static com.movieflix.utils.AppConstants.PAGE_SIZE;
 
 @RestController
 @RequestMapping("/api/v1/movie")
@@ -68,6 +73,36 @@ public class MovieController {
         return  objectMapper.readValue(movieDtoObj,MovieDTO.class); //readvalue from string movieDtoObj and map to MovieDTOobje
         //because response will be in JSON , and while dealing
         //with file and jSOn u can't directly send any files, convert in string
+
+
+    }
+
+    @GetMapping("/allMoviesPage")
+    public ResponseEntity<MoviePageResponse> getMovieWithPagination(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE,required = false) Integer pageSize
+
+
+    ){
+
+        return ResponseEntity.ok(movieService.getAllMoviesWithPagination(pageNumber,pageSize));
+
+
+
+    }
+
+
+    @GetMapping("/allMappingPageSort")
+    public ResponseEntity<MoviePageResponse> getMovieWithPaginationAndSorting(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE,required = false) Integer pageSize,
+            @RequestParam(defaultValue =AppConstants.SORT_BY,required = false) String sortBy,
+            @RequestParam(defaultValue = AppConstants.SORT_DIR,required = false)String dir
+
+    ){
+
+        return ResponseEntity.ok(movieService.getAllMoviesWithPaginationandSorting(pageNumber,pageSize,sortBy,dir));
+
 
 
     }
