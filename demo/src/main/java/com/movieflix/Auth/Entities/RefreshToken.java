@@ -1,7 +1,6 @@
-package com.movieflix.Auth.Repository;
+package com.movieflix.Auth.Entities;
 
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 

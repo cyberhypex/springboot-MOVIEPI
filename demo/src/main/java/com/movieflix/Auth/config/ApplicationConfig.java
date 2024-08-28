@@ -1,0 +1,51 @@
+package com.movieflix.Auth.config;
+
+
+import com.movieflix.Auth.Repository.UserRepository;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@Configuration
+public class ApplicationConfig {
+
+    private final UserRepository userRepository;
+
+    public ApplicationConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+
+    @Bean
+    public UserDetailsService userDetailsService(){
+    return username ->userRepository.findByUserName(username).orElseThrow(()->new UsernameNotFoundException("User not found with e-mail:"+username));
+    } //you will get user specific data
+
+    @Bean
+    public AuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();//it is an interface providing user authentication provider
+        authenticationProvider.setUserDetailsService(userDetailsService());//will set all userdetails into provider
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
+
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return  new BCryptPasswordEncoder();//encoding of password
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager(); //processing authentication request
+    }
+
+
+}

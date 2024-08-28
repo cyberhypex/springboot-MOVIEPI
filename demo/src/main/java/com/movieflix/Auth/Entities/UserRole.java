@@ -1,4 +1,4 @@
-package com.movieflix.Auth.Repository;
+package com.movieflix.Auth.Entities;
 
 public enum UserRole {
     USER,
