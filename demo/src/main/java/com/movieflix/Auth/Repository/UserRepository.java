@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User,Integer> {
 
-    Optional<User> findByUserName(String username);//it will generate query itself , JPA does this
+    Optional<User> findByEmail(String username);//it will generate query itself , JPA does this
 
 }
