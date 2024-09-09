@@ -37,35 +37,36 @@ public class AuthFilterService extends OncePerRequestFilter {
         String jwt;
         String username;
 
-        if(authHeader==null || authHeader.startsWith("Bearer ")){ //convention of Jwt
-            filterChain.doFilter(request,response);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
             return;
-
         }
         //extract jwt token
         jwt=authHeader.substring(7);//since bearer has 6 words
         //extract username from JWT
-        username=jwtService.extractUsername(jwt);
+        jwt = authHeader.substring(7);
 
+        // extract username from JWT
+        username = jwtService.extractUsername(jwt);
 
-        if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
-            UserDetails userDetails=userDetailsService.loadUserByUsername(username);
-            if(jwtService.isTokenValid(jwt,userDetails)){
-                UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if(jwtService.isTokenValid(jwt, userDetails)) {
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
                         userDetails.getAuthorities()
                 );
 
                 authenticationToken.setDetails(
-                     new WebAuthenticationDetailsSource().buildDetails(request)
+                        new WebAuthenticationDetailsSource().buildDetails(request)
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-
         }
-        filterChain.doFilter(request,response);
+
+        filterChain.doFilter(request, response);
 
 
 

@@ -10,6 +10,7 @@ import com.movieflix.exceptions.EmptyFileException;
 import com.movieflix.utils.AppConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
@@ -27,6 +28,8 @@ public class MovieController {
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')") //due to web method security
     @PostMapping("/add-movie")
     public ResponseEntity<MovieDTO> addMovieHandler(@RequestPart MultipartFile file, @RequestPart String movieDto
                                                     ) throws IOException, EmptyFileException {

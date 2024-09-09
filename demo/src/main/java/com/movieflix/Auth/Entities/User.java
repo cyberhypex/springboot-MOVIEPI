@@ -22,46 +22,40 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Builder
-
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
-   @NotBlank(message = "This can't be empty")
+    @NotBlank(message = "The name field can't be blank")
     private String name;
-    @NotBlank(message = "This can't be empty")
-    private String userName;
-    @NotBlank(message = "This can't be empty")
+
+    @NotBlank(message = "The username field can't be blank")
     @Column(unique = true)
-    @Email(message = "Please enter email in perfect format")// helps check if it mainatisn email regex
+    private String username;
 
+    @NotBlank(message = "The email field can't be blank")
+    @Column(unique = true)
+    @Email(message = "Please enter email in proper format!")
     private String email;
-    @NotBlank(message = "This can't be empty")
-    @Size(min = 5,message ="Password must be atleast 5 characters" )
-    private String password;
 
+    @NotBlank(message = "The password field can't be blank")
+    @Size(min = 5, message = "The password must have at least 5 characters")
+    private String password;
 
     @OneToOne(mappedBy = "user")
     private RefreshToken refreshToken;
 
+
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
-
-    private boolean isEnabled; // by default set to true
-    private boolean isAccountNonExpired;
-    private boolean isAccountNonLocked;
-    private boolean isCredentialsNonExpired;
-
-
-
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-       return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
@@ -76,21 +70,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return isAccountNonExpired;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpired;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return true;
     }
 }
