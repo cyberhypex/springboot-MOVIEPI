@@ -29,28 +29,37 @@ public class User implements UserDetails {
     private Integer userId;
 
     @NotBlank(message = "The name field can't be blank")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @NotBlank(message = "The username field can't be blank")
-    @Column(unique = true)
+    @Column(name = "username", unique = true, nullable = false) // Ensure the column is NOT NULL
     private String username;
 
     @NotBlank(message = "The email field can't be blank")
-    @Column(unique = true)
     @Email(message = "Please enter email in proper format!")
+    @Column(name = "email", unique = true, nullable = false) // Ensure the column is NOT NULL
     private String email;
 
     @NotBlank(message = "The password field can't be blank")
     @Size(min = 5, message = "The password must have at least 5 characters")
+    @Column(name = "password", nullable = false) // Ensure the column is NOT NULL
     private String password;
 
     @OneToOne(mappedBy = "user")
     private RefreshToken refreshToken;
 
-
-
     @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private UserRole role;
+
+
+    @OneToOne(mappedBy = "user")
+    private ForgotPassword forgotPassword;
+
+
+
+
 
 
     @Override
@@ -65,7 +74,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return email; // Ensure this matches your logic
     }
 
     @Override
