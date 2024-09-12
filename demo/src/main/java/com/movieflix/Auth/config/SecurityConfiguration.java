@@ -31,7 +31,7 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)//disable cross site request forgery
                 .authorizeHttpRequests(auth->auth
-                        .requestMatchers("/api/v1/auth/**")//all urls with this pattern will be allowed
+                        .requestMatchers("/api/v1/auth/**","/forgotPassword/**")//all urls with this pattern will be allowed
                         .permitAll()
                         .anyRequest()
                         .authenticated())

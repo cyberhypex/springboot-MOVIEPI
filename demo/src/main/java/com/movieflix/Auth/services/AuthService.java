@@ -21,7 +21,7 @@ public class AuthService {
     private final UserRepository userRepository;
 
     private final JwtService jwtService;
-    private  final RefreshTokenService refreshTokenService;
+    private final RefreshTokenService refreshTokenService;
     private final AuthenticationManager authenticationManager;
 
     public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, JwtService jwtService, RefreshTokenService refreshTokenService, AuthenticationManager authenticationManager) {
@@ -32,8 +32,8 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
-    public AuthResponse register(RegisterRequest registerRequest){
-        var user= User.builder()
+    public AuthResponse register(RegisterRequest registerRequest) {
+        var user = User.builder()
                 .name(registerRequest.getName())
                 .email(registerRequest.getEmail())
                 .username(registerRequest.getUsername())
@@ -41,15 +41,16 @@ public class AuthService {
                 .role(UserRole.USER)
                 .build();
 
-        User savedUser=userRepository.save(user);
-        var accessToken=jwtService.generateToken(savedUser);
-        var refreshToken=refreshTokenService.createRefreshToken(savedUser.getEmail());//create refresh token using email
+        User savedUser = userRepository.save(user);
+        var accessToken = jwtService.generateToken(savedUser);
+        var refreshToken = refreshTokenService.createRefreshToken(savedUser.getEmail());//create refresh token using email
         return AuthResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken.getRefreshToken())
                 .build();
 
     }
+
 
     public AuthResponse login(LoginRequest loginRequest){
 
